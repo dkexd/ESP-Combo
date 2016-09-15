@@ -10,10 +10,8 @@ Project structure:
 
 /ntp/ - Network Time Protocol implementation from Richard Burton https://github.com/raburton/esp8266 . TO BE USED IN FUTURE
 
-/tcp_client/  
-    &        - Networking part. WARNING, folders will be merged to /networking/ due to being practicly identical. 
-/tcp_server/  
-
+/tcp_client/ - Networking part. Contains TCP and UDP cleint/server parts.
+  
 /user/ - Contains main program, main.c
 
 combo_esp.sh - Shell script for fast testing. Compiles, flashes firmaware and launches catty.py serial monitor/logger. If you want to use it in your enviroment, please edit PATH variables and USB port number according to your system. Flashing mode is following: "boot=new app=1 spi_speed=40 spi_mode=QIO spi_size_map=3". See end of this file for more info.
