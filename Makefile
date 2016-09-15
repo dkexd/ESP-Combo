@@ -25,7 +25,7 @@ SUBDIRS=    \
 	user    \
        driver   \
        tcp_client    \
-       tcp_server
+       #tcp_server
 
 endif # } PDIR
 
@@ -51,7 +51,7 @@ COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
 	driver/libdriver.a \
 	tcp_client/libtcpclient.a  \
-	tcp_server/libtcpserver.a
+	#tcp_server/libtcpserver.a
 
 LINKFLAGS_eagle.app.v6 = \
 	-L$(SDK_PATH)/lib        \

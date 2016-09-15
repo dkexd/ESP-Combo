@@ -4,6 +4,7 @@
 #include "esp_common.h"
 #include "espconn.h"
 #include "user_config.h"
+#include "cJSON.h"
 
 #include "tcp_client.h"
 
@@ -15,6 +16,32 @@
 
 #define SOFT_AP_SSID "DEMO_AP"
 #define SOFT_AP_PASSWORD "12345678"
+
+#define	MAXSIZE 4096
+
+static char buffer [MAXSIZE];
+
+
+/*---------------------------------------
+								cJSON
+------------------------------------------*/
+
+
+void doit(char *text)
+{
+	char *out;cJSON *json;
+
+	json=cJSON_Parse(text);
+	if (!json) {printf("Error before: [%s]\n",cJSON_GetErrorPtr());}
+	else
+	{
+		out=cJSON_Print(json);
+		cJSON_Delete(json);
+		printf("%s\n",out);
+		free(out);
+	}
+}
+
 
 
 
@@ -81,7 +108,10 @@ void TcpRecvCb(void *arg, char *pdata, unsigned short len)
 		                                          tcp_server_local->proto.tcp->remote_ip[3],
 		                                          tcp_server_local->proto.tcp->remote_port,
 		                                          len);
+
+
    espconn_send(tcp_server_local,pdata,len);
+
 }
 void TcpReconnectCb(void *arg, sint8 err)
 {
@@ -275,9 +305,15 @@ void TcpServerRecvCb(void *arg, char *pdata, unsigned short len)
 		                                          tcp_server_local->proto.tcp->remote_ip[2],
 		                                          tcp_server_local->proto.tcp->remote_ip[3],
 		                                          tcp_server_local->proto.tcp->remote_port,
-		                                          len, pdata);
-   espconn_send(tcp_server_local,pdata,len);
+                                              len, pdata);
+	 //Echo back at sender
+   //espconn_send(tcp_server_local,pdata,len);
+	 int sz = sizeof(pdata)/sizeof(pdata[0]);
+		buffer[sz] = '\0';
+	 strcpy(buffer, pdata);
+	 printf("TCP Buffer is : %s\n", buffer);
 }
+
 void TcpServerReconnectCb(void *arg, sint8 err)
 {
     struct espconn* tcp_server_local=arg;
@@ -307,8 +343,8 @@ void TcpServerReconnectCb(void *arg, sint8 err)
 
 void TcpLocalServer(void* arg)
 {
-	// change print function name
-		    printf("%s\n", __func__);
+	// print function name
+	  printf("%s\n", __func__);
 
 
 	static struct espconn tcp_server_local;
@@ -357,7 +393,21 @@ void UdpRecvCb(void *arg, char *pdata, unsigned short len)
 		                                          udp_server_local->proto.tcp->remote_port,
 																							pdata
 		                                          );
-    espconn_send(udp_server_local,pdata,len);
+
+		//Echo back at sender
+    //espconn_send(udp_server_local,pdata,len);
+
+//Calculate the number of elements(characters) in array pdata
+//Set the NUL terminator on the max number for message		
+		int sz = sizeof(pdata)/sizeof(pdata[0]);
+		buffer[sz] = '\0';
+		strcpy(buffer, pdata);
+		printf("UDP Buffer is : %s\n", buffer);
+		doit(buffer);
+
+		//printf("%s\n", buffer);
+
+
 }
 void UdpSendCb(void* arg)
 {

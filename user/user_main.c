@@ -21,18 +21,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-
+//espressif stuff
 #include "esp_common.h"
-
+//Real time operational system
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-
+//networking
 #include "lwip/sockets.h"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
 #include "espressif/espconn.h"
 #include "espressif/airkiss.h"
-
+//peripherals and drivers
 #include "gpio.h"
 #include "uart.h"
 /**********************************Interrupt handler and button defines*************************************************/
@@ -246,6 +246,9 @@ void ICACHE_FLASH_ATTR udp_task(void *pvParameters)
 		udpServer();
 }
 /************END TASKS********************************************************************************************************************/
+
+
+
 
 
 

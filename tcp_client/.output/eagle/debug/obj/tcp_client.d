@@ -84,4 +84,4 @@
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/spi_flash.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/pwm.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/espconn.h \
- ../include/user_config.h tcp_client.h
+ ../include/user_config.h ../include/cJSON.h tcp_client.h
