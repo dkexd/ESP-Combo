@@ -1,0 +1,27 @@
+.output/eagle/debug/obj/my_jsonrpc.o .output/eagle/debug/obj/my_jsonrpc.d : my_jsonrpc.c \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/stdio.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/_ansi.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/newlib.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/config.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/machine/ieeefp.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/features.h \
+ /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//extra_include/xtensa/config/core-isa.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.5/include/stddef.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.5/include/stdarg.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/reent.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/_ansi.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/_types.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/machine/_types.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/machine/_default_types.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/lock.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/types.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/machine/types.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/stdio.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/stdlib.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/machine/stdlib.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/alloca.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/string.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/cdefs.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/string.h \
+ /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.5/include/stdbool.h \
+ ../include/cJSON.h ../include/my_jsonrpc.h

@@ -23,9 +23,9 @@ GEN_BINS= eagle.app.v6.bin
 SPECIAL_MKTARGETS=$(APP_MKTARGETS)
 SUBDIRS=    \
 	user    \
-       driver   \
-       tcp_client    \
-       #tcp_server
+	driver   \
+	tcp_client    \
+
 
 endif # } PDIR
 
@@ -51,7 +51,7 @@ COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
 	driver/libdriver.a \
 	tcp_client/libtcpclient.a  \
-	#tcp_server/libtcpserver.a
+
 
 LINKFLAGS_eagle.app.v6 = \
 	-L$(SDK_PATH)/lib        \
@@ -135,4 +135,3 @@ sinclude $(SDK_PATH)/Makefile
 
 .PHONY: FORCE
 FORCE:
-

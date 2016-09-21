@@ -1,12 +1,14 @@
 
 #include "c_types.h"
-
+#include "tcp_client.h"
 #include "esp_common.h"
 #include "espconn.h"
 #include "user_config.h"
-#include "cJSON.h"
+//cJSON library
+#include "json/cJSON.h"
+//
+#include "my_jsonrpc.h"
 
-#include "tcp_client.h"
 
 
 
@@ -23,9 +25,9 @@ static char buffer [MAXSIZE];
 
 
 /*---------------------------------------
-								cJSON
+									cJSON
 ------------------------------------------*/
-
+/*
 
 void doit(char *text)
 {
@@ -43,7 +45,7 @@ void doit(char *text)
 }
 
 
-
+*/
 
 
 /*--------------------------------------------------------------
@@ -97,6 +99,8 @@ void TcpClienSendCb(void* arg)
 		                                          tcp_server_local->proto.tcp->remote_ip[3],
 		                                          tcp_server_local->proto.tcp->remote_port
 		                                          );
+	//pdata = "{\"jsonrpc\": \"2.0\", \"method\": \"POST\", \"params\": [42, 23], \"id\": 1}";
+	//espconn_send(tcp_server_local, pdata, len);
 }
 
 void TcpRecvCb(void *arg, char *pdata, unsigned short len)
@@ -109,8 +113,13 @@ void TcpRecvCb(void *arg, char *pdata, unsigned short len)
 		                                          tcp_server_local->proto.tcp->remote_port,
 		                                          len);
 
-
-   espconn_send(tcp_server_local,pdata,len);
+  int sz = sizeof(pdata)/sizeof(pdata[0]);
+	buffer[sz] = '\0';
+	strcpy(buffer, pdata);
+	printf("TCP Buffer is : %s\n", buffer);
+	//Trying to parse as JSONRPC
+	jsonrpc_parse(buffer);
+  //espconn_send(tcp_server_local,pdata,len);
 
 }
 void TcpReconnectCb(void *arg, sint8 err)
@@ -136,7 +145,7 @@ void TcpReconnectCb(void *arg, sint8 err)
 
 
 
-/*************************************************************************************************************************************/
+/****************************************** TCP CLIENT *******************************************************************************************/
 
 
 void TcpLocalClient(void* arg)
@@ -162,14 +171,14 @@ void TcpLocalClient(void* arg)
   static struct espconn tcp_client;
 	static esp_tcp tcp;
 
-	// host: "10.10.1.61", Andreas
-  //  port: 42006
+	// host: "10.10.1.61", Andreas data collector
+  // port: 42006
 
-	tcp.remote_port= 7007;
+	tcp.remote_port= 42006;
 	tcp.remote_ip[0] = 10;
 	tcp.remote_ip[1] = 10;
 	tcp.remote_ip[2] = 1;
-	tcp.remote_ip[3] = 67;
+	tcp.remote_ip[3] = 61;
 
 
 	tcp.local_port = espconn_port();
@@ -182,20 +191,12 @@ void TcpLocalClient(void* arg)
 
 	tcp_client.proto.tcp=&tcp;
 
-
 	espconn_regist_connectcb(&tcp_client,TcpClientConnect);
 	espconn_regist_recvcb(&tcp_client,TcpRecvCb);
 	espconn_regist_reconcb(&tcp_client,TcpReconnectCb);
 	espconn_regist_disconcb(&tcp_client,TcpClientDisConnect);
 	espconn_regist_sentcb(&tcp_client,TcpClienSendCb);
 
-/*******change Ip array values 	10.10.1.67:7007 *
-	tcp.remote_ip[0] = 10;
-	tcp.remote_ip[1] = 10;
-	tcp.remote_ip[2] = 1;
-	tcp.remote_ip[3] = 67;
-	tcp.remote_port = 7007;
-*******/
 	DBG_PRINT("tcp client connect server,server ip:%d.%d.%d.%d port:%d\n",tcp_client.proto.tcp->remote_ip[0],
 		                                          tcp_client.proto.tcp->remote_ip[1],
 		                                          tcp_client.proto.tcp->remote_ip[2],
@@ -312,6 +313,8 @@ void TcpServerRecvCb(void *arg, char *pdata, unsigned short len)
 		buffer[sz] = '\0';
 	 strcpy(buffer, pdata);
 	 printf("TCP Buffer is : %s\n", buffer);
+	 //Trying to parse as JSONRPC
+	 jsonrpc_parse(buffer);
 }
 
 void TcpServerReconnectCb(void *arg, sint8 err)
@@ -347,11 +350,12 @@ void TcpLocalServer(void* arg)
 	  printf("%s\n", __func__);
 
 
+
 	static struct espconn tcp_server_local;
 	static esp_tcp tcp;
 	tcp_server_local.type=ESPCONN_TCP;
 	tcp_server_local.proto.tcp=&tcp;
-	tcp.local_port=7008;
+	tcp.local_port=42006;
 
 	espconn_regist_connectcb(&tcp_server_local,TcpServerClientConnect);
 	espconn_regist_recvcb(&tcp_server_local,TcpServerRecvCb);
@@ -398,12 +402,13 @@ void UdpRecvCb(void *arg, char *pdata, unsigned short len)
     //espconn_send(udp_server_local,pdata,len);
 
 //Calculate the number of elements(characters) in array pdata
-//Set the NUL terminator on the max number for message		
+//Set the NUL terminator on the max number for message
 		int sz = sizeof(pdata)/sizeof(pdata[0]);
 		buffer[sz] = '\0';
 		strcpy(buffer, pdata);
 		printf("UDP Buffer is : %s\n", buffer);
-		doit(buffer);
+		//Trying to parse as JSONRPC
+		jsonrpc_parse(buffer);
 
 		//printf("%s\n", buffer);
 

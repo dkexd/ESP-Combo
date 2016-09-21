@@ -10,6 +10,7 @@
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//extra_include/xtensa/config/core-isa.h \
  /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.5/include/stdbool.h \
  /home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.5/include/stddef.h \
+ tcp_client.h ../include/user_config.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/esp_common.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/c_types.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/esp_libc.h \
@@ -84,4 +85,5 @@
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/spi_flash.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/pwm.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/espconn.h \
- ../include/user_config.h ../include/cJSON.h tcp_client.h
+ /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/json/cJSON.h \
+ ../include/my_jsonrpc.h

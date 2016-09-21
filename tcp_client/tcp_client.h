@@ -17,9 +17,9 @@
 
 //TCP CLIENT Concig
 
-const uint8 tcp_server_ip[4]={192,168,1,100};
-#define TCP_SERVER_REMOTE_PORT (7007)
-#define TCP_CLIENT_GREETING "Hello!This is a tcp client test\n"
+const uint8 tcp_server_ip[4]={10,10,1,61};
+#define TCP_SERVER_REMOTE_PORT (42006)
+#define TCP_CLIENT_GREETING "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"method\":\"POST\",\"params\":{\"url\":\"/network\",\"data\":{\":id\":\"bebb68a0-aaaa-11e6-86ca-001a65002cf0\",\":type\":\"urn:seluxit:xml:bastard:network-1.0\"}}}"
 
 #define TCP_CLIENT_KEEP_ALIVE_ENABLE 1
 
@@ -58,5 +58,3 @@ const uint8 udp_server_ip[4]={192,168,1,100};
 	    os_printf(fmt,##__VA_ARGS__);\
 	}while(0)
 #define DBG_LINES(v) os_printf("------------------%s---------------\n",v)
-
-

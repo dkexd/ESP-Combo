@@ -35,6 +35,7 @@
 //peripherals and drivers
 #include "gpio.h"
 #include "uart.h"
+
 /**********************************Interrupt handler and button defines*************************************************/
 #define ETS_GPIO_INTR_ENABLE()  _xt_isr_unmask(1 << ETS_GPIO_INUM)  //ENABLE INTERRUPTS
 #define ETS_GPIO_INTR_DISABLE() _xt_isr_mask(1 << ETS_GPIO_INUM)    //DISABLE INTERRUPTS
@@ -231,19 +232,25 @@ smartconfig_done(sc_status status, void *pdata)
 void ICACHE_FLASH_ATTR smartconfig_task(void *pvParameters)
 {
     smartconfig_start(smartconfig_done);
-		vTaskDelay(3000);
-		TcpLocalServer();
 
-
-		// For some reason only first TCP related function is called
-		//
 
     vTaskDelete(NULL);
 }
-void ICACHE_FLASH_ATTR udp_task(void *pvParameters)
+void ICACHE_FLASH_ATTR udp_listen_task(void *pvParameters)
 {
 		vTaskDelay(3000);
 		udpServer();
+}
+void ICACHE_FLASH_ATTR tcp_listen_task(void *pvParameters)
+{
+		vTaskDelay(3000);
+		TcpLocalServer();
+}
+
+void ICACHE_FLASH_ATTR collector_send(void *pvParameters)
+{
+		vTaskDelay(4000);
+		TcpLocalClient();
 }
 /************END TASKS********************************************************************************************************************/
 
@@ -294,7 +301,11 @@ void ICACHE_FLASH_ATTR
 user_init(void)
 {
     printf("SDK version:%s\n", system_get_sdk_version());
+
 /**********************Button and Interrupt*********************************************/
+/*
+		/****** Exluded this part and relay interrupt seems still working!
+
 		printf("TEST TOGGLE ON GPIO15,YOU WILL SEE THE LED BLINKING ON IO15\n");
 		GPIO_ConfigTypeDef io_out_conf;
 		io_out_conf.GPIO_IntrType = GPIO_PIN_INTR_DISABLE;
@@ -305,7 +316,7 @@ user_init(void)
 
 	  GPIO_OUTPUT_SET(LED_IO_NUM,0);
 		gpio16_output_conf();
-
+*/
 	  printf("SETUP GPIO0 BUTTON INTERRUPT CONFIGURE..\r\n");
 		GPIO_ConfigTypeDef io_in_conf;
 		io_in_conf.GPIO_IntrType = GPIO_PIN_INTR_NEGEDGE;
@@ -324,9 +335,13 @@ user_init(void)
     wifi_set_opmode(STATION_MODE);
 
     xTaskCreate(smartconfig_task, "smartconfig_task", 256, NULL, 2, NULL);
-		xTaskCreate(udp_task, "udp_task", 256, NULL, 2, NULL);
+		xTaskCreate(tcp_listen_task, "tcp_listen_task", 256, NULL, 2, NULL);
+		xTaskCreate(udp_listen_task, "udp_listen_task", 256, NULL, 2, NULL);
+		xTaskCreate(collector_send, "collector_send", 256, NULL, 2, NULL);
 
 		uart_init_new();
+
+		/*  Exluded this part and UART is still working!
 		while(1)
 		{
 				uint8 alpha= 'A';
@@ -335,4 +350,5 @@ user_init(void)
 				uart0_tx_buffer(test_str, strlen(test_str));
 				break;
 		}
+		*/
 }
