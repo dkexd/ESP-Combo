@@ -1,5 +1,7 @@
 Project structure:
 
+
+
 /android/ - .apk for onboarding ESP8266 to WiFi Access Point. More at https://github.com/EspressifApp/EsptouchForAndroidForRTOS
 
 /bin/ - precompiled binaries of this project
@@ -18,7 +20,7 @@ combo_esp.sh - Shell script for fast testing. Compiles, flashes firmaware and la
 
 Makefile - makefile for compiling. In case if want to add your libraries/sourcefiles, you can do that by creating a separate directory and adding it's name to "SUBDIRS=".
 
-gen_misc.sh - original script for setting compilation attributes and simple compilation. You may want to edit SDK_PATH and BIN_PATH before executing it.
+gen_misc.sh - original script for setting compilation attributes and simple compilation. You may want to edit SDK_PATH and BIN_PATH before executing it. You also need  https://github.com/kapitanvong/catty_script for it to work. You can set path to catty_fast.py or catty.py by changing CATTY_PATH enviromental variable.
 
 readme.txt - I guess you reading it right now, don't you? :)
 
