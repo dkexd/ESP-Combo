@@ -240,17 +240,20 @@ void ICACHE_FLASH_ATTR udp_listen_task(void *pvParameters)
 {
 		vTaskDelay(3000);
 		udpServer();
+		vTaskDelete(NULL);
 }
 void ICACHE_FLASH_ATTR tcp_listen_task(void *pvParameters)
 {
 		vTaskDelay(3000);
 		TcpLocalServer();
+		vTaskDelete(NULL);
 }
 
 void ICACHE_FLASH_ATTR collector_send(void *pvParameters)
 {
 		vTaskDelay(4000);
 		TcpLocalClient();
+		vTaskDelete(NULL);
 }
 /************END TASKS********************************************************************************************************************/
 
@@ -300,7 +303,7 @@ void io_intr_handler(void)
 void ICACHE_FLASH_ATTR
 user_init(void)
 {
-    printf("SDK version:%s\n", system_get_sdk_version());
+
 
 /**********************Button and Interrupt*********************************************/
 /*
@@ -338,9 +341,10 @@ user_init(void)
 		xTaskCreate(tcp_listen_task, "tcp_listen_task", 256, NULL, 2, NULL);
 		xTaskCreate(udp_listen_task, "udp_listen_task", 256, NULL, 2, NULL);
 		xTaskCreate(collector_send, "collector_send", 256, NULL, 2, NULL);
-
+		//Default baud 74800
 		uart_init_new();
-
+		//New baud 112500
+		printf("SDK version:%s\n", system_get_sdk_version());
 		/*  Exluded this part and UART is still working!
 		while(1)
 		{

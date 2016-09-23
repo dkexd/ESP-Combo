@@ -1,6 +1,9 @@
+Based on:
+FreeRTOS v7.5.2
+Espressif RTOS SDK ver: 1.4.0(c599790)
+
+
 Project structure:
-
-
 
 /android/ - .apk for onboarding ESP8266 to WiFi Access Point. More at https://github.com/EspressifApp/EsptouchForAndroidForRTOS
 
