@@ -36,6 +36,7 @@
 #include "gpio.h"
 #include "uart.h"
 
+
 /**********************************Interrupt handler and button defines*************************************************/
 #define ETS_GPIO_INTR_ENABLE()  _xt_isr_unmask(1 << ETS_GPIO_INUM)  //ENABLE INTERRUPTS
 #define ETS_GPIO_INTR_DISABLE() _xt_isr_mask(1 << ETS_GPIO_INUM)    //DISABLE INTERRUPTS
@@ -344,7 +345,15 @@ user_init(void)
 		//Default baud 74800
 		uart_init_new();
 		//New baud 112500
-		printf("SDK version:%s\n", system_get_sdk_version());
+		//sysinfo
+		printf("-------------------------------\n");
+		printf("SDK version: %s\n", system_get_sdk_version());
+		printf("Chip ID: %d\n", system_get_chip_id());
+		printf("Free heap(RAM) size in Bytes: %d\n",system_get_free_heap_size());
+		printf("System time in microsecond: %d\n",system_get_time());
+		printf("Print the system memory distribution, including data/rodata/bss/heap\n");
+		system_print_meminfo();
+		printf("-------------------------------\n");
 		/*  Exluded this part and UART is still working!
 		while(1)
 		{

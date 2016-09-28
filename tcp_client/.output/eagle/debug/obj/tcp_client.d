@@ -86,4 +86,5 @@
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/pwm.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/espconn.h \
  /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/json/cJSON.h \
- ../include/my_jsonrpc.h
+ ../include/my_jsonrpc.h ../include/driver/gpio.h \
+ /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0//include/espressif/esp8266/eagle_soc.h

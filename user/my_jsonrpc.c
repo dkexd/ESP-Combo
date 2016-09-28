@@ -8,17 +8,8 @@
 
 
 
-#define	MAXSIZE 4096
+#define	MAXSIZE 200
 
-/* Error codes
-enum error_code{
-	Parse_error = -32700,
-	Invalid_Request = -32600,
-	Method_not_found = -32601,
-  Invalid_params = -32602,
-  Internal_error = -32603
-};
-*/
 //-32700	Parse error	Invalid JSON was received by the server.
 //An error occurred on the server while parsing the JSON text.
 //-32600	Invalid Request	The JSON sent is not a valid Request object.
@@ -29,7 +20,12 @@ enum error_code{
 
 
 const char check_jsonrpc[]="\"2.0\"";
-int struct_mark = 0;
+
+
+
+
+
+
 //char *ptr;
 //ptr = &buffer[0];
 /*
@@ -110,12 +106,13 @@ void jsonrpc_read_test(char * new_json_string){
 		cJSON_Delete(root);
 }
 //DESCRIPTION Parsing recieved JSON RPC Response
-void jsonrpc_parse(const char* text) {
+void jsonrpc_parse(const char * text, Jsonrpc_request_t * jsonRequest) {
+jsonRequest->parse_status = 0;
 
 
-		printf("Pre-processed string looks like this: %s\n",text);
+printf("BEFORE jsonrpc_parse Free heap(RAM) size in Bytes: %d\n",system_get_free_heap_size());
+
 		cJSON * root = cJSON_Parse(text);
-
 		if (root == NULL) {
 			printf("No such element in JSON!\n");
 			cJSON_Delete(root);
@@ -133,16 +130,19 @@ void jsonrpc_parse(const char* text) {
 		}
 		printf("RECIEVED JSON RPC MESSAGE!\n");
 		printf("--------------------------\n");
+		//RESPONSE OR REQUEST
+
+
 
 		char * jsonrpc_resp_ver = cJSON_Print(jsonrpc);
+
 		printf("JSON RPC version: %s\n",jsonrpc_resp_ver);
+		free(jsonrpc_resp_ver);
+
 		printf("--------------------\n");
-
-//RESPONSE OR REQUEST
-
 		cJSON * method = cJSON_GetObjectItem(root,"method");
 		if (method == NULL) {
-/*-------------------------------------------------------------------------------------------------------*/
+
 			//START parsing RESPONSE
 					printf("It's a RESPONSE!\n");
 					printf("--------------------------\n");
@@ -160,24 +160,23 @@ void jsonrpc_parse(const char* text) {
 						}
 		   		//ERROR is good
 					else{
-						//marked as error
-						struct_mark = 1;
 						printf("OH NOES, it's an Error Response!\n");
 						//open error objects here
 						cJSON * code = cJSON_GetObjectItem(error,"code");
 						if (code == NULL) {
 								printf("No such element in error!\n");
-								//cJSON_Delete(root);
+								cJSON_Delete(root);
 								printf("Exiting parsing function!\n");
 								return;
 							}
 						int jsonrpc_resp_err_code = cJSON_GetObjectItem(error,"code")->valueint;
 						printf("JSON RPC Error code: %d\n",jsonrpc_resp_err_code);
+						// jsonrpc_resp_err_code ;
 
 						cJSON * message = cJSON_GetObjectItem(error,"message");
 						if (message == NULL) {
 								printf("No such element in error!\n");
-								//cJSON_Delete(root);
+								cJSON_Delete(root);
 								printf("Exiting parsing function!\n");
 								return;
 							}
@@ -200,25 +199,27 @@ void jsonrpc_parse(const char* text) {
 					}
 					*/
 						printf("JSON RPC Error message: %s\n",jsonrpc_resp_err_msg);
-
+						free(jsonrpc_resp_err_msg);
 						cJSON * data = cJSON_GetObjectItem(error,"data");
 						if (data == NULL) {
 								printf("No such element in error!\n");
-								//cJSON_Delete(root);
+								cJSON_Delete(root);
 								printf("Exiting parsing function!\n");
 								return;
 							}
 						char * jsonrpc_resp_err_data = cJSON_Print(data);
 						printf("JSON RPC Error data: %s\n",jsonrpc_resp_err_data);
+						free(jsonrpc_resp_err_data);
+
 					}
 
 				}
 				//RESULT is OK
 				else{
-					//marked as no error
-					  struct_mark = 0;
 						char * jsonrpc_resp_res = cJSON_Print(result);
 						printf("JSON RPC result: %s\n",jsonrpc_resp_res);
+						free(jsonrpc_resp_res);
+
 				}
 
 
@@ -242,72 +243,83 @@ void jsonrpc_parse(const char* text) {
 			cJSON * method = cJSON_GetObjectItem(root,"method");
 			if (method == NULL) {
 					printf("No such element in root!\n");
-					//cJSON_Delete(root);
+					cJSON_Delete(root);
 					printf("Exiting parsing function!\n");
 					return;
 				}
 			else{
-				char * jsonrpc_req_meth = cJSON_Print(method);
-				printf("JSON RPC Method: %s\n",jsonrpc_req_meth);
+				jsonRequest->parse_status = 1;
+				jsonRequest->jsonrpc_req_meth = cJSON_Print(method);
+				printf("JSON RPC Method: %s\n",jsonRequest->jsonrpc_req_meth);
+
 			}
 //PARAMS
 			cJSON * params = cJSON_GetObjectItem(root,"params");
 			if (params == NULL) {
 					printf("No such element in root!\n");
-					//cJSON_Delete(root);
+					cJSON_Delete(root);
 					printf("Exiting parsing function!\n");
 					return;
 			}
 			else{
 				char * jsonrpc_req_params = cJSON_Print(params);
+				free(jsonrpc_req_params);
 				//printf("JSON RPC Parameters: %s\n",jsonrpc_req_params);
 			}
 ////params.url
 				cJSON * url = cJSON_GetObjectItem(params,"url");
 				if (url == NULL) {
 						printf("No such element in params!\n");
-						//cJSON_Delete(root);
+						cJSON_Delete(root);
 						printf("Exiting parsing function!\n");
 						return;
 				}
 				else{
 					char * jsonrpc_req_params_url = cJSON_Print(url);
 					printf("+JSON RPC url: %s\n",jsonrpc_req_params_url);
+					free(jsonrpc_req_params_url);
 				}
 ////params.data
 				cJSON * data = cJSON_GetObjectItem(params,"data");
 				if (data == NULL) {
 						printf("No such element in params!\n");
-						//cJSON_Delete(root);
+						cJSON_Delete(root);
 						printf("Exiting parsing function!\n");
 						return;
 				}
 				else{
 					char * jsonrpc_req_params_data = cJSON_Print(data);
+					free(jsonrpc_req_params_data);
+
 					//printf("+JSON RPC data: %s\n",jsonrpc_req_params_data);
-				}
+
 //////params.data.:id
-					cJSON * id = cJSON_GetObjectItem(data,":id");
-					if (id == NULL) {
+
+					cJSON * id2 = cJSON_GetObjectItem(data,":id");
+
+					if (id2 == NULL) {
 							printf("No such element in data!\n");
-							//cJSON_Delete(root);
-							//printf("Exiting parsing function!\n");
+
 						}
 					else{
-						char * jsonrpc_req_params_data_id = cJSON_Print(id);
-						printf("++JSON RPC :id: %s\n",jsonrpc_req_params_data_id);
+						jsonRequest->jsonrpc_req_params_data_id = cJSON_Print(id2);
+						printf("++JSON RPC :id: %s\n",jsonRequest->jsonrpc_req_params_data_id);
+
 					}
 //////params.data.:type
 					cJSON * type = cJSON_GetObjectItem(data,":type");
 					if (type == NULL) {
 							printf("No such element in data!\n");
-							//cJSON_Delete(root);
-							//printf("Exiting parsing function!\n");
+
+
 						}
 					else{
-						char * jsonrpc_req_params_data_type = cJSON_Print(type);
-						printf("++JSON RPC :type: %s\n",jsonrpc_req_params_data_type);
+						jsonRequest->jsonrpc_req_params_data_type = cJSON_Print(type);
+						printf("++JSON RPC :type: %s\n",jsonRequest->jsonrpc_req_params_data_type);
+
 					}
+				}
+					/*
 //////params.data.name
 					cJSON * name = cJSON_GetObjectItem(data,"name");
 					if (name == NULL) {
@@ -342,6 +354,7 @@ void jsonrpc_parse(const char* text) {
 						}
 					}
 
+				*/
 
 
 //END of parsing REQUEST
@@ -358,78 +371,30 @@ void jsonrpc_parse(const char* text) {
 		else{
 			int jsonrpc_id = cJSON_GetObjectItem(root,"id")->valueint;
 			printf("JSON RPC id: %d\n",jsonrpc_id);
+
 		}
 
 		printf("--------------------------\n");
+printf("BEFORE cJSON_Delete(root);  jsonrpc_parse Free heap(RAM) size in Bytes: %d\n",system_get_free_heap_size());
 		cJSON_Delete(root);
+printf("AFTER jsonrpc_parse Free heap(RAM) size in Bytes: %d\n",system_get_free_heap_size());
 
-
-//define Structure of JSONRPC Response
-/*
-
---- case struct_mark = 1 then is response_result
---- case struct_mark = 2 then is response_error
---- case struct_mark = 3 then is request
-
-
-
-typedef enum{
-	RESULT_OUTPUT,
-	RESULT_ERR,
-} STATUS_TYPE;
-
-static struct Jsonrpc_response_all{
-		unsigned char id;
-		char jsonrpc_resp_code;
-		char jsonrpc_msg;
-		char jsonspc_data;
-}
-
-	switch (struct_mark) {
-
-		case 1:
-			Jsonrpc_response_all.id = RESULT_OUTPUT
-			Jsonrpc_response_all.resp_code =
-			static struct Jsonrpc_response_result_output{
-			    char jsonrpc_resp_res;
-					char jsonrpc_id;
-			}
-
-
-		case 2:
-
-			static struct Jsonrpc_response_error_output{
-					struct Jsonrpc_Error{
-						int	jsonrpc_resp_err_code;
-						char jsonrpc_resp_err_msg;
-						char jsonrpc_resp_err_data;
-					}
-					char jsonrpc_id;
-			}
-
-
-		case 3:
-
-			static struct Jsonrpc_request_output{
-					char method;
-					struct Jsonrpc_Params{
-						char jsonrpc_req_params_url;
-						struct Jsonrpc_Data{
-							char jsonrpc_req_params_data_id;
-							char jsonrpc_req_params_data_type;
-							char jsonrpc_req_params_data_name;
-							struct Jsonrpc_Name{
-								int jsonrpc_req_params_data_number_value1;
-							}
-
-						};
-					char jsonrpc_id;
-				}
-		  }
-
-
-	}
-	*/
-	//struct switch END
 }
 //jsonrpc_parse END
+
+/*
+		free(jsonrpc_resp_ver);
+		free(jsonrpc_resp_err_code);
+		free(jsonrpc_resp_err_msg);
+		free(jsonrpc_resp_err_data);
+		free(jsonrpc_resp_res);
+		free(jsonrpc_req_meth);
+		free(jsonrpc_req_params);
+		free(jsonrpc_req_params_url);
+		free(jsonrpc_req_params_data);
+		free(jsonrpc_req_params_data_id);
+		free(jsonrpc_req_params_data_type);
+		free(jsonrpc_req_params_data_name);
+		free(jsonrpc_req_params_data_number);
+		free(jsonrpc_req_params_data_number_value1);
+		*/

@@ -19,8 +19,7 @@
 
 const uint8 tcp_server_ip[4]={10,10,1,61};
 #define TCP_SERVER_REMOTE_PORT (42006)
-#define TCP_CLIENT_GREETING "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"method\":\"POST\",\"params\":{\"url\":\"/network\",\"data\":{\":id\":\"bebb68a0-aaaa-11e6-86ca-001a65002cf0\",\":type\":\"urn:seluxit:xml:bastard:network-1.0\"}}}"
-
+#define TCP_CLIENT_GREETING "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"method\":\"POST\",\"params\":{\"url\":\"/network\",\"data\":{\":id\":\"1c727866-c5bb-45e6-977e-7a3828a4b526\",\":type\":\"urn:seluxit:xml:bastard:network-1.0\"}}}"
 #define TCP_CLIENT_KEEP_ALIVE_ENABLE 1
 
         #define TCP_CLIENT_KEEP_ALIVE_IDLE_S (10)

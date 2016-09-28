@@ -21,6 +21,7 @@ ifndef PDIR # {
 GEN_IMAGES= eagle.app.v6.out
 GEN_BINS= eagle.app.v6.bin
 SPECIAL_MKTARGETS=$(APP_MKTARGETS)
+#Targeting subdirectories with source files
 SUBDIRS=    \
 	user    \
 	driver   \
@@ -46,13 +47,13 @@ endif
 ifeq ($(FLAVOR),release)
     TARGET_LDFLAGS += -g -O0
 endif
-
+#Creates binary lib for whole directory
 COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
 	driver/libdriver.a \
 	tcp_client/libtcpclient.a  \
 
-
+#Adding libraries from /home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0/lib/
 LINKFLAGS_eagle.app.v6 = \
 	-L$(SDK_PATH)/lib        \
 	-Wl,--gc-sections   \

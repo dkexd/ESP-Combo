@@ -29,13 +29,13 @@ extern "C"
 #endif
 
 /* cJSON Types: */
-#define cJSON_False 0
-#define cJSON_True 1
-#define cJSON_NULL 2
-#define cJSON_Number 3
-#define cJSON_String 4
-#define cJSON_Array 5
-#define cJSON_Object 6
+#define cJSON_False  (1 << 0)
+#define cJSON_True   (1 << 1)
+#define cJSON_NULL   (1 << 2)
+#define cJSON_Number (1 << 3)
+#define cJSON_String (1 << 4)
+#define cJSON_Array  (1 << 5)
+#define cJSON_Object (1 << 6)
 	
 #define cJSON_IsReference 256
 #define cJSON_StringIsConst 512
@@ -80,7 +80,7 @@ extern int	  cJSON_GetArraySize(cJSON *array);
 extern cJSON *cJSON_GetArrayItem(cJSON *array,int item);
 /* Get item "string" from object. Case insensitive. */
 extern cJSON *cJSON_GetObjectItem(cJSON *object,const char *string);
-
+extern int cJSON_HasObjectItem(cJSON *object,const char *string);
 /* For analysing failed parses. This returns a pointer to the parse error. You'll probably need to look a few chars back to make sense of it. Defined when cJSON_Parse() returns 0. 0 when cJSON_Parse() succeeds. */
 extern const char *cJSON_GetErrorPtr(void);
 	
@@ -126,6 +126,7 @@ need to be released. With recurse!=0, it will duplicate any children connected t
 The item->next and ->prev pointers are always zero on return from Duplicate. */
 
 /* ParseWithOpts allows you to require (and check) that the JSON is null terminated, and to retrieve the pointer to the final byte parsed. */
+/* If you supply a ptr in return_parse_end and parsing fails, then return_parse_end will contain a pointer to the error. If not, then cJSON_GetErrorPtr() does the job. */
 extern cJSON *cJSON_ParseWithOpts(const char *value,const char **return_parse_end,int require_null_terminated);
 
 extern void cJSON_Minify(char *json);
@@ -141,6 +142,9 @@ extern void cJSON_Minify(char *json);
 /* When assigning an integer value, it needs to be propagated to valuedouble too. */
 #define cJSON_SetIntValue(object,val)			((object)?(object)->valueint=(object)->valuedouble=(val):(val))
 #define cJSON_SetNumberValue(object,val)		((object)?(object)->valueint=(object)->valuedouble=(val):(val))
+
+/* Macro for iterating over an array */
+#define cJSON_ArrayForEach(pos, head)			for(pos = (head)->child; pos != NULL; pos = pos->next)
 
 #ifdef __cplusplus
 }

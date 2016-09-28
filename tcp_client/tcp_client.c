@@ -6,10 +6,24 @@
 #include "user_config.h"
 //cJSON library
 #include "json/cJSON.h"
-//
+//JSON RPC
 #include "my_jsonrpc.h"
 
 
+
+/*************** TEST **************/
+
+//peripherals and drivers
+#include "gpio.h"
+
+
+//GPIO OUTPUT SETTINGS
+#define  LED_IO_MUX  PERIPHS_IO_MUX_MTDO_U
+#define  LED_IO_NUM  5
+#define  LED_IO_FUNC FUNC_GPIO15
+#define  LED_IO_PIN  GPIO_Pin_5
+
+/******************TEST *************/
 
 
 
@@ -118,7 +132,12 @@ void TcpRecvCb(void *arg, char *pdata, unsigned short len)
 	strcpy(buffer, pdata);
 	printf("TCP Buffer is : %s\n", buffer);
 	//Trying to parse as JSONRPC
-	jsonrpc_parse(buffer);
+	//creating Structure with Type Jsonrpc_request_t
+	Jsonrpc_request_t request;
+	jsonrpc_parse(buffer, &request);
+	//printf("Method is : %s\n", request.jsonrpc_req_meth);
+
+
   //espconn_send(tcp_server_local,pdata,len);
 
 }
@@ -250,6 +269,7 @@ void StaConectApConfig(char*ssid,char*password)
 
 void TcpServerClientConnect(void*arg)
 {
+
     struct espconn* tcp_server_local=arg;
 #if TCP_SERVER_KEEP_ALIVE_ENABLE
 	espconn_set_opt(tcp_server_local,BIT(3));//enable keep alive ,this api must call in connect callback
@@ -274,6 +294,7 @@ void TcpServerClientConnect(void*arg)
 }
 void TcpServerClientDisConnect(void* arg)
 {
+
     struct espconn* tcp_server_local=arg;
 	DBG_LINES("TCP server DISCONNECT");
 	DBG_PRINT("tcp client ip:%d.%d.%d.%d port:%d\n",tcp_server_local->proto.tcp->remote_ip[0],
@@ -286,6 +307,7 @@ void TcpServerClientDisConnect(void* arg)
 
 void TcpServerClienSendCb(void* arg)
 {
+
     struct espconn* tcp_server_local=arg;
 	DBG_LINES("TCP server SendCb");
 	DBG_PRINT("tcp client ip:%d.%d.%d.%d port:%d\n",tcp_server_local->proto.tcp->remote_ip[0],
@@ -300,6 +322,7 @@ void TcpServerClienSendCb(void* arg)
 
 void TcpServerRecvCb(void *arg, char *pdata, unsigned short len)
 {
+
    struct espconn* tcp_server_local=arg;
    DBG_PRINT("Recv tcp client ip:%d.%d.%d.%d port:%d len:%d\n data: %s\n",tcp_server_local->proto.tcp->remote_ip[0],
 		                                          tcp_server_local->proto.tcp->remote_ip[1],
@@ -310,11 +333,47 @@ void TcpServerRecvCb(void *arg, char *pdata, unsigned short len)
 	 //Echo back at sender
    //espconn_send(tcp_server_local,pdata,len);
 	 int sz = sizeof(pdata)/sizeof(pdata[0]);
-		buffer[sz] = '\0';
+	 buffer[sz] = '\0';
 	 strcpy(buffer, pdata);
+
+
+
 	 printf("TCP Buffer is : %s\n", buffer);
+	  //free(buffer);
+
 	 //Trying to parse as JSONRPC
-	 jsonrpc_parse(buffer);
+	 Jsonrpc_request_t request;
+	 jsonrpc_parse(pdata, &request);
+//GPIO Access example UDP (GPIO 5, Relay)
+	 if (request.parse_status != 0) {
+
+		 printf("Method is : %s\n", request.jsonrpc_req_meth);
+
+		 static uint8 val = 0;
+		 //post put get
+		 if((strstr(request.jsonrpc_req_meth, "PUT"))){
+			 if(val == 0){
+				 gpio16_output_set(0);
+				 GPIO_OUTPUT_SET(LED_IO_NUM,1);
+				 val = 1;
+				 printf("Aight, I put on my robe and wizard hat...\n");
+			 }else{
+				 gpio16_output_set(1);
+				 GPIO_OUTPUT_SET(LED_IO_NUM,0);
+				 val = 0;
+			 }
+		 }
+		 //Freeeedom!!!11
+		 free(request.jsonrpc_req_meth);
+		 free(request.jsonrpc_req_params_data_id);
+		 free(request.jsonrpc_req_params_data_type);
+	 }
+
+
+
+
+
+
 }
 
 void TcpServerReconnectCb(void *arg, sint8 err)
@@ -348,7 +407,6 @@ void TcpLocalServer(void* arg)
 {
 	// print function name
 	  printf("%s\n", __func__);
-
 
 
 	static struct espconn tcp_server_local;
@@ -408,7 +466,33 @@ void UdpRecvCb(void *arg, char *pdata, unsigned short len)
 		strcpy(buffer, pdata);
 		printf("UDP Buffer is : %s\n", buffer);
 		//Trying to parse as JSONRPC
-		jsonrpc_parse(buffer);
+		Jsonrpc_request_t request;
+		jsonrpc_parse(buffer, &request);
+	//GPIO Access example UDP (GPIO 5, Relay)
+		if (request.parse_status != 0) {
+
+ 		 printf("Method is : %s\n", request.jsonrpc_req_meth);
+
+ 		 static uint8 val = 0;
+ 		 //post put get
+ 		 if((strstr(request.jsonrpc_req_meth, "PUT"))){
+ 			 if(val == 0){
+ 				 gpio16_output_set(0);
+ 				 GPIO_OUTPUT_SET(LED_IO_NUM,1);
+ 				 val = 1;
+ 				 printf("Aight, I put on my robe and wizard hat...\n");
+ 			 }else{
+ 				 gpio16_output_set(1);
+ 				 GPIO_OUTPUT_SET(LED_IO_NUM,0);
+ 				 val = 0;
+ 			 }
+ 		 }
+ 		 //Freeeedom!!!11
+ 		 free(request.jsonrpc_req_meth);
+ 		 free(request.jsonrpc_req_params_data_id);
+ 		 free(request.jsonrpc_req_params_data_type);
+ 	 }
+
 
 		//printf("%s\n", buffer);
 
