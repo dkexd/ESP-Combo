@@ -4,26 +4,27 @@ Espressif RTOS SDK ver: 1.4.0(c599790)
 
 
 Project structure:
+====
 
-/android/ - .apk for onboarding ESP8266 to WiFi Access Point. More at https://github.com/EspressifApp/EsptouchForAndroidForRTOS
+**/android/** - .apk for onboarding ESP8266 to WiFi Access Point. More at https://github.com/EspressifApp/EsptouchForAndroidForRTOS
 
-/bin/ - precompiled binaries of this project
+**/bin/** - precompiled binaries of this project
 
-/driver/ - source code for support of GPIO, Hardware timer, I2C, SPI and UART
+**/driver/** - source code for support of GPIO, Hardware timer, I2C, SPI and UART
 
-/include/ - header files
+**/include/** - header files
 
-/ntp/ - Network Time Protocol implementation from Richard Burton https://github.com/raburton/esp8266 . TO BE USED IN FUTURE
+**/ntp/** - Network Time Protocol implementation from Richard Burton https://github.com/raburton/esp8266 . TO BE USED IN FUTURE
 
-/tcp_client/ - Networking part. Contains TCP and UDP cleint/server parts.
+**/tcp_client/** - Networking part. Contains TCP and UDP cleint/server parts.
 
-/user/ - Contains main program, main.c
+**/user/** - Contains main program, main.c
 
-combo_esp.sh - Shell script for fast testing. Compiles, flashes firmaware and launches catty.py serial monitor/logger. If you want to use it in your enviroment, please edit PATH variables and USB port number according to your system. Flashing mode is following: "boot=new app=1 spi_speed=40 spi_mode=QIO spi_size_map=3". See end of this file for more info.
+**combo_esp.sh** - Shell script for fast testing. Compiles, flashes firmaware and launches catty.py serial monitor/logger. If you want to use it in your enviroment, please edit PATH variables and USB port number according to your system. Flashing mode is following: "boot=new app=1 spi_speed=40 spi_mode=QIO spi_size_map=3". See end of this file for more info.
 
-Makefile - makefile for compiling. In case if want to add your libraries/sourcefiles, you can do that by creating a separate directory and adding it's name to "SUBDIRS=".
+**Makefile** - makefile for compiling. In case if want to add your libraries/sourcefiles, you can do that by creating a separate directory and adding it's name to "SUBDIRS=".
 
-gen_misc.sh - original script for setting compilation attributes and simple compilation. You may want to edit SDK_PATH and BIN_PATH before executing it. You also need  https://github.com/kapitanvong/catty_script for it to work. You can set path to catty_fast.py or catty.py by changing CATTY_PATH enviromental variable.
+**gen_misc.sh** - original script for setting compilation attributes and simple compilation. You may want to edit SDK_PATH and BIN_PATH before executing it. You also need  https://github.com/kapitanvong/catty_script for it to work. You can set path to catty_fast.py or catty.py by changing CATTY_PATH enviromental variable.
 
 readme.txt - I guess you reading it right now, don't you? :)
 
@@ -31,7 +32,8 @@ readme.txt - I guess you reading it right now, don't you? :)
 
 
 
-Compilation options:
+Compilation options for gen_misc:
+====
 
 (1) COMPILE
     Possible value: xcc
