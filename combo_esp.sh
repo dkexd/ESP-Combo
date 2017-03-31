@@ -1,10 +1,10 @@
 #!/bin/bash
 
 export PATH=/home/diko/Desktop/esp-open-sdk/xtensa-lx106-elf/bin/:$PATH
-export SDK_PATH=/home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0/
-export BIN_PATH=/home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0/bin/
-export FIRM_PATH=/home/diko/Desktop/ESP8266_RTOS_SDK-1.4.0/bin/upgrade/
-export CATTY_PATH=/home/diko/Desktop/catty_script/
+export SDK_PATH=/home/diko/Desktop/Espressif-RTOS-SDK/Espressif-RTOS-SDK
+export BIN_PATH=/home/diko/Desktop/Espressif-RTOS-SDK/Espressif-RTOS-SDK/bin/
+export FIRM_PATH=/home/diko/Desktop/Espressif-RTOS-SDK/Espressif-RTOS-SDK/bin/upgrade/
+export CATTY_PATH=/home/diko/Desktop/Espressif-RTOS-SDK/catty_script/
 
 echo "combo_esp.sh version 12.09.2016"
 
@@ -12,7 +12,8 @@ boot=new
 app=1
 spi_speed=40
 spi_mode=QIO
-spi_size_map=3
+#spi_size_map=3
+spi_size_map=0
 
 make clean
 
